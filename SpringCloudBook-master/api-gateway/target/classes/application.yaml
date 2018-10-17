@@ -1,0 +1,36 @@
+---
+spring:
+  application:
+    name: api-gateway
+server:
+  port: 5555
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:1001/eureka/
+zuul:
+  routes:
+    api-b:
+      path: /api-b/**
+      serviceId: hello-service
+    api-b-url:
+      path: /api-b-url/**
+      url: forward:/local
+    api-a:
+      path: /api/a/**
+      serviceId: hello-service
+    api-a-url:
+      path: /api-a-url/**
+      url: http://localhost:8001/
+    api-f:
+      path: /api-f/**
+      serviceId: feign-consumer
+    api-c:
+      path: /ddd/**
+      serviceId: hello-service
+  host:
+    max-per-route-connections: 20
+    max-total-connections: 200
+  AccessFilter:
+    pre:
+      disable: false
